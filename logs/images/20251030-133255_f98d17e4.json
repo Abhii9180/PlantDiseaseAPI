@@ -1,0 +1,31 @@
+{
+  "top5": [
+    [
+      "Pepper,_bell___Bacterial_spot",
+      0.8929781317710876
+    ],
+    [
+      "Apple___Cedar_apple_rust",
+      0.10691820085048676
+    ],
+    [
+      "Tomato___Early_blight",
+      9.23604384297505e-05
+    ],
+    [
+      "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot",
+      4.01508168579312e-06
+    ],
+    [
+      "Apple___Apple_scab",
+      2.726696948229801e-06
+    ]
+  ],
+  "uncertain": false,
+  "threshold": 0.6,
+  "image_size": [
+    412,
+    251
+  ],
+  "saved_at": "20251030-133255"
+}

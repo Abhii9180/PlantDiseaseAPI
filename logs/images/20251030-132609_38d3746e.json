@@ -1,0 +1,31 @@
+{
+  "top5": [
+    [
+      "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+      0.9522567987442017
+    ],
+    [
+      "Cherry_(including_sour)___Powdery_mildew",
+      0.015544207766652107
+    ],
+    [
+      "Pepper,_bell___Bacterial_spot",
+      0.014026880264282227
+    ],
+    [
+      "Tomato___Early_blight",
+      0.010600415989756584
+    ],
+    [
+      "Tomato___Bacterial_spot",
+      0.004693577531725168
+    ]
+  ],
+  "uncertain": false,
+  "threshold": 0.6,
+  "image_size": [
+    529,
+    308
+  ],
+  "saved_at": "20251030-132609"
+}

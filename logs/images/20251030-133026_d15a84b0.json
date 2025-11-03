@@ -1,0 +1,31 @@
+{
+  "top5": [
+    [
+      "Blueberry___healthy",
+      0.9854876399040222
+    ],
+    [
+      "Apple___healthy",
+      0.011372849345207214
+    ],
+    [
+      "Orange___Haunglongbing_(Citrus_greening)",
+      0.0012416891986504197
+    ],
+    [
+      "Potato___healthy",
+      0.0008305917144753039
+    ],
+    [
+      "Pepper,_bell___healthy",
+      0.0005240672035142779
+    ]
+  ],
+  "uncertain": false,
+  "threshold": 0.6,
+  "image_size": [
+    169,
+    169
+  ],
+  "saved_at": "20251030-133026"
+}

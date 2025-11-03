@@ -1,0 +1,31 @@
+{
+  "top5": [
+    [
+      "Potato___healthy",
+      0.39563223719596863
+    ],
+    [
+      "Blueberry___healthy",
+      0.3922916352748871
+    ],
+    [
+      "Pepper,_bell___healthy",
+      0.07526534795761108
+    ],
+    [
+      "Apple___Black_rot",
+      0.05037430301308632
+    ],
+    [
+      "Apple___Apple_scab",
+      0.042730662971735
+    ]
+  ],
+  "uncertain": true,
+  "threshold": 0.6,
+  "image_size": [
+    283,
+    256
+  ],
+  "saved_at": "20251030-133101"
+}

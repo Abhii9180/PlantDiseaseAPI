@@ -1,0 +1,31 @@
+{
+  "top5": [
+    [
+      "Pepper,_bell___healthy",
+      0.9020796418190002
+    ],
+    [
+      "Pepper,_bell___Bacterial_spot",
+      0.08687371015548706
+    ],
+    [
+      "Blueberry___healthy",
+      0.007026136387139559
+    ],
+    [
+      "Tomato___Early_blight",
+      0.0034975805319845676
+    ],
+    [
+      "Peach___healthy",
+      0.00021994819690007716
+    ]
+  ],
+  "uncertain": false,
+  "threshold": 0.6,
+  "image_size": [
+    388,
+    797
+  ],
+  "saved_at": "20251014-235610"
+}

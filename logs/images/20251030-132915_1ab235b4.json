@@ -1,0 +1,31 @@
+{
+  "top5": [
+    [
+      "Strawberry___Leaf_scorch",
+      0.9999998807907104
+    ],
+    [
+      "Grape___Esca_(Black_Measles)",
+      8.510883020562687e-08
+    ],
+    [
+      "Grape___Black_rot",
+      1.7842943123014265e-08
+    ],
+    [
+      "Apple___Cedar_apple_rust",
+      7.590517658861984e-10
+    ],
+    [
+      "Tomato___Early_blight",
+      6.914833150517552e-10
+    ]
+  ],
+  "uncertain": false,
+  "threshold": 0.6,
+  "image_size": [
+    240,
+    219
+  ],
+  "saved_at": "20251030-132915"
+}

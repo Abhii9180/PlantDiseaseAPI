@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: plant-disease-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn api:app

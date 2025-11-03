@@ -1,0 +1,31 @@
+{
+  "top5": [
+    [
+      "Squash___Powdery_mildew",
+      0.4559990167617798
+    ],
+    [
+      "Strawberry___Leaf_scorch",
+      0.24429389834403992
+    ],
+    [
+      "Tomato___Septoria_leaf_spot",
+      0.12354335933923721
+    ],
+    [
+      "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)",
+      0.11185479164123535
+    ],
+    [
+      "Corn_(maize)___Common_rust_",
+      0.03101116605103016
+    ]
+  ],
+  "uncertain": true,
+  "threshold": 0.6,
+  "image_size": [
+    188,
+    268
+  ],
+  "saved_at": "20251030-132738"
+}

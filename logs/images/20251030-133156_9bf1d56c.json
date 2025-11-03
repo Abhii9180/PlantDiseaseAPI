@@ -1,0 +1,31 @@
+{
+  "top5": [
+    [
+      "Potato___healthy",
+      0.7079392671585083
+    ],
+    [
+      "Soybean___healthy",
+      0.2915763556957245
+    ],
+    [
+      "Raspberry___healthy",
+      0.0004054729943163693
+    ],
+    [
+      "Pepper,_bell___healthy",
+      4.5130043872632086e-05
+    ],
+    [
+      "Potato___Late_blight",
+      9.125891665462404e-06
+    ]
+  ],
+  "uncertain": false,
+  "threshold": 0.6,
+  "image_size": [
+    457,
+    280
+  ],
+  "saved_at": "20251030-133156"
+}

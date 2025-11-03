@@ -1,0 +1,31 @@
+{
+  "top5": [
+    [
+      "Orange___Haunglongbing_(Citrus_greening)",
+      0.43562424182891846
+    ],
+    [
+      "Corn_(maize)___healthy",
+      0.24601228535175323
+    ],
+    [
+      "Peach___Bacterial_spot",
+      0.1977112740278244
+    ],
+    [
+      "Peach___healthy",
+      0.03406006097793579
+    ],
+    [
+      "Potato___healthy",
+      0.017386384308338165
+    ]
+  ],
+  "uncertain": true,
+  "threshold": 0.6,
+  "image_size": [
+    87,
+    154
+  ],
+  "saved_at": "20251025-205310"
+}

@@ -1,0 +1,31 @@
+{
+  "top5": [
+    [
+      "Potato___healthy",
+      0.8128272294998169
+    ],
+    [
+      "Soybean___healthy",
+      0.09431011229753494
+    ],
+    [
+      "Blueberry___healthy",
+      0.04273412004113197
+    ],
+    [
+      "Cherry_(including_sour)___healthy",
+      0.040001943707466125
+    ],
+    [
+      "Pepper,_bell___healthy",
+      0.006864435970783234
+    ]
+  ],
+  "uncertain": false,
+  "threshold": 0.6,
+  "image_size": [
+    314,
+    232
+  ],
+  "saved_at": "20251030-132955"
+}

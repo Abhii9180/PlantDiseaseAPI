@@ -1,0 +1,31 @@
+{
+  "top5": [
+    [
+      "Tomato___Septoria_leaf_spot",
+      0.8648363351821899
+    ],
+    [
+      "Tomato___Bacterial_spot",
+      0.13346703350543976
+    ],
+    [
+      "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)",
+      0.0008819621871225536
+    ],
+    [
+      "Strawberry___Leaf_scorch",
+      0.00035225466126576066
+    ],
+    [
+      "Tomato___Target_Spot",
+      0.00013637507800012827
+    ]
+  ],
+  "uncertain": false,
+  "threshold": 0.6,
+  "image_size": [
+    635,
+    358
+  ],
+  "saved_at": "20251030-132836"
+}
