@@ -1,24 +1,19 @@
-from flask import Flask, request, jsonify
-import tensorflow as tf
+import os
+import json
 import numpy as np
+import tensorflow as tf
 from PIL import Image
-import json, os
+from flask import Flask, request, jsonify
 
 # -----------------------------------------------------------
-# Load model and labels
+# Configuration
 # -----------------------------------------------------------
 MODEL_PATH = "plant_mnv2.keras"
 LABELS_PATH = "labels.json"
 IMAGE_SIZE = (160, 160)
 
-app = Flask(__name__)
-
-# Load once on startup
-model = tf.keras.models.load_model(MODEL_PATH)
-with open(LABELS_PATH) as f:
-    class_names = json.load(f)
-
-pretty = {
+# Dictionary to map machine-readable labels to human-readable names
+PRETTY_LABELS = {
     "Apple___Apple_scab": "Apple — Apple scab",
     "Apple___Black_rot": "Apple — Black rot",
     "Apple___Cedar_apple_rust": "Apple — Cedar apple rust",
@@ -59,40 +54,90 @@ pretty = {
     "Tomato___healthy": "Tomato — Healthy"
 }
 
+
 # -----------------------------------------------------------
-# API endpoint
+# Initialize Flask App and Load Global Resources
 # -----------------------------------------------------------
+
+app = Flask(__name__)
+
+# Load model and labels once when the server starts
+try:
+    model = tf.keras.models.load_model(MODEL_PATH)
+    with open(LABELS_PATH) as f:
+        class_names = json.load(f)
+    print("Model and labels loaded successfully.")
+except Exception as e:
+    print(f"Error loading model or labels: {e}")
+    # In a production environment, you might want the service to exit if this fails
+    # raise e
+
+# -----------------------------------------------------------
+# API Endpoints
+# -----------------------------------------------------------
+
 @app.route("/predict", methods=["POST"])
 def predict():
+    """Accepts an image file via POST request, runs inference, and returns JSON."""
+    
+    # 1. Input validation
     if "file" not in request.files:
-        return jsonify({"error": "No file part"}), 400
+        return jsonify({"error": "No 'file' part in the request. Please upload an image under the key 'file'."}), 400
 
     file = request.files["file"]
     if file.filename == "":
         return jsonify({"error": "No selected file"}), 400
 
     try:
-        img = Image.open(file).convert("RGB").resize(IMAGE_SIZE)
+        # 2. Preprocessing
+        # Open file stream, convert to RGB, and resize to the expected input dimensions
+        img = Image.open(file.stream).convert("RGB").resize(IMAGE_SIZE)
+        
+        # Convert image to numpy array, normalize, and add batch dimension
         x = np.array(img, dtype="float32")[None, ...] / 255.0
+        
+        # 3. Prediction
         preds = model.predict(x, verbose=0)[0]
+        
+        # 4. Result formatting
         top_idx = int(np.argmax(preds))
         conf = float(preds[top_idx])
+        
+        # Get machine label and human-readable label
         label = class_names[top_idx]
-        human = pretty.get(label, label)
+        human_label = PRETTY_LABELS.get(label, label)
 
+        # 5. Return JSON response
         return jsonify({
-            "predicted_class": human,
-            "confidence": round(conf, 3)
+            "predicted_class": human_label,
+            "confidence": round(conf, 4), # Use 4 decimal places for better precision
+            "raw_label": label
         })
+        
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        # Log the error for debugging on Render
+        app.logger.error(f"Prediction failed: {e}")
+        return jsonify({"error": f"Internal server error during prediction: {str(e)}"}), 500
 
 
 @app.route("/", methods=["GET"])
 def home():
-    return jsonify({"message": "Plant Disease Classifier API working!"})
+    """Simple health check endpoint."""
+    return jsonify({
+        "status": "Online",
+        "message": "Plant Disease Classifier API working!",
+        "endpoint": "POST to /predict with image file under key 'file'"
+    })
 
 
 # -----------------------------------------------------------
+# Local/Gunicorn Deployment Configuration
+# -----------------------------------------------------------
+
+# IMPORTANT: When deploying with Gunicorn (Start Command: gunicorn api:app), 
+# Gunicorn handles the host and port binding. The app.run() block below 
+# is primarily for local testing and will be ignored by Gunicorn.
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    # Get port from environment or default to 5000 for local testing
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
