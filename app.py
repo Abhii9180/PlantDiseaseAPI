@@ -2,6 +2,7 @@ import os, json, time, uuid, numpy as np
 from PIL import Image
 import gradio as gr
 import tensorflow as tf
+import os
 
 # --- All your existing logic remains unchanged ---
 
@@ -243,5 +244,6 @@ with gr.Blocks(
 
 # --- Launch (Unchanged) ---
 if __name__ == "__main__":
-    # Launch on localhost; remove server_name to allow Gradio to choose defaults
-    demo.launch()
+    # Use PORT from environment variable, default to 7860 if not set
+    port = int(os.environ.get("PORT", 7860))
+    demo.launch(server_name="0.0.0.0", server_port=port)
