@@ -114,7 +114,7 @@ TREATMENT_INFO = {
 }
 
 # -----------------------------------------------------------
-# Initialize Flask App
+# Initialize Flask App and Cached Model Loader
 # -----------------------------------------------------------
 app = Flask(__name__)
 
@@ -126,6 +126,15 @@ except Exception as e:
     print(f"Error loading global labels file: {e}")
     raise e
 
+_model = None
+def get_model():
+    """Load model once and reuse."""
+    global _model
+    if _model is None:
+        print("Loading model into memory...")
+        _model = tf.keras.models.load_model(MODEL_PATH)
+    return _model
+
 # -----------------------------------------------------------
 # API Endpoints
 # -----------------------------------------------------------
@@ -133,7 +142,7 @@ except Exception as e:
 def predict():
     """Accepts an image file via POST request, runs inference, and returns JSON."""
     try:
-        model = tf.keras.models.load_model(MODEL_PATH)
+        model = get_model()
     except Exception as e:
         app.logger.error(f"Prediction failed: Could not load model: {e}")
         return jsonify({"error": "Internal server error: Model loading failed"}), 500
@@ -147,7 +156,9 @@ def predict():
 
     try:
         img = Image.open(file.stream).convert("RGB").resize(IMAGE_SIZE)
-        x = np.array(img, dtype="float32")[None, ...] / 255.0
+        # ⚠️ No normalization — model trained on 0–255 values
+        x = np.array(img, dtype="float32")[None, ...]
+
         preds = model.predict(x, verbose=0)[0]
         top_idx = int(np.argmax(preds))
         conf = float(preds[top_idx])
