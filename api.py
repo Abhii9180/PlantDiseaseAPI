@@ -61,16 +61,18 @@ PRETTY_LABELS = {
 
 app = Flask(__name__)
 
-# Load model and labels once when the server starts
+# Load only the labels file globally.
+# The large model will be "lazy loaded" inside the /predict endpoint
+# to avoid OOM (Out of Memory) crashes on Render's free tier.
 try:
-    model = tf.keras.models.load_model(MODEL_PATH)
+    # model = tf.keras.models.load_model(MODEL_PATH) # <-- REMOVED FROM GLOBAL
     with open(LABELS_PATH) as f:
         class_names = json.load(f)
-    print("Model and labels loaded successfully.")
+    print("Labels loaded successfully.")
 except Exception as e:
-    print(f"Error loading model or labels: {e}")
-    # In a production environment, you might want the service to exit if this fails
-    # raise e
+    print(f"Error loading global labels file: {e}")
+    # If labels fail, the app can't run.
+    raise e
 
 # -----------------------------------------------------------
 # API Endpoints
@@ -80,7 +82,16 @@ except Exception as e:
 def predict():
     """Accepts an image file via POST request, runs inference, and returns JSON."""
     
-    # 1. Input validation
+    # 1. LAZY LOAD THE MODEL
+    # Load the model fresh every time /predict is called.
+    # This is slow, but necessary to stay within Render's 512MB RAM limit.
+    try:
+        model = tf.keras.models.load_model(MODEL_PATH)
+    except Exception as e:
+        app.logger.error(f"Prediction failed: Could not load model: {e}")
+        return jsonify({"error": f"Internal server error: Model loading failed"}), 500
+
+    # 2. Input validation
     if "file" not in request.files:
         return jsonify({"error": "No 'file' part in the request. Please upload an image under the key 'file'."}), 400
 
@@ -89,17 +100,17 @@ def predict():
         return jsonify({"error": "No selected file"}), 400
 
     try:
-        # 2. Preprocessing
+        # 3. Preprocessing
         # Open file stream, convert to RGB, and resize to the expected input dimensions
         img = Image.open(file.stream).convert("RGB").resize(IMAGE_SIZE)
         
         # Convert image to numpy array, normalize, and add batch dimension
         x = np.array(img, dtype="float32")[None, ...] / 255.0
         
-        # 3. Prediction
+        # 4. Prediction
         preds = model.predict(x, verbose=0)[0]
         
-        # 4. Result formatting
+        # 5. Result formatting
         top_idx = int(np.argmax(preds))
         conf = float(preds[top_idx])
         
@@ -107,7 +118,7 @@ def predict():
         label = class_names[top_idx]
         human_label = PRETTY_LABELS.get(label, label)
 
-        # 5. Return JSON response
+        # 6. Return JSON response
         return jsonify({
             "predicted_class": human_label,
             "confidence": round(conf, 4), # Use 4 decimal places for better precision
@@ -134,9 +145,8 @@ def home():
 # Local/Gunicorn Deployment Configuration
 # -----------------------------------------------------------
 
-# IMPORTANT: When deploying with Gunicorn (Start Command: gunicorn api:app), 
-# Gunicorn handles the host and port binding. The app.run() block below 
-# is primarily for local testing and will be ignored by Gunicorn.
+# This block is only used for local testing (e.g., python api.py)
+# Gunicorn ignores this and finds the 'app' object directly.
 if __name__ == "__main__":
     # Get port from environment or default to 5000 for local testing
     port = int(os.environ.get("PORT", 5000))
